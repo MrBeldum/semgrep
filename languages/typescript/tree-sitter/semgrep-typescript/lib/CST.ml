@@ -813,56 +813,45 @@ and enum_body = (
 )
 
 and export_statement = [
-    `Choice_choice_export_choice_STAR_from_clause_choice_auto_semi of [
-        `Choice_export_choice_STAR_from_clause_choice_auto_semi of [
-            `Export_choice_STAR_from_clause_choice_auto_semi of (
-                Token.t (* "export" *)
-              * [
-                    `STAR_from_clause of (Token.t (* "*" *) * from_clause)
-                  | `Name_export_from_clause of (namespace_export * from_clause)
-                  | `Export_clause_from_clause of (export_clause * from_clause)
-                  | `Export_clause of export_clause
-                ]
-              * semicolon
-            )
-          | `Rep_deco_export_choice_decl of (
-                decorator list (* zero or more *)
-              * Token.t (* "export" *)
-              * [
-                    `Decl of declaration
-                  | `Defa_choice_decl of (
-                        Token.t (* "default" *)
-                      * [
-                            `Decl of declaration
-                          | `Exp_choice_auto_semi of (expression * semicolon)
-                        ]
-                    )
-                ]
-            )
-        ]
-      | `Export_type_export_clause_opt_from_clause_choice_auto_semi of (
+    `Choice_export_choice_STAR_from_clause_choice_auto_semi of [
+        `Export_choice_STAR_from_clause_choice_auto_semi of (
             Token.t (* "export" *)
-          * Token.t (* "type" *)
-          * export_clause
-          * from_clause option
+          * [
+                `STAR_from_clause of (Token.t (* "*" *) * from_clause)
+              | `Name_export_from_clause of (namespace_export * from_clause)
+              | `Export_clause_from_clause of (export_clause * from_clause)
+              | `Export_clause of export_clause
+            ]
           * semicolon
         )
-      | `Export_EQ_exp_choice_auto_semi of (
-            Token.t (* "export" *) * Token.t (* "=" *) * expression * semicolon
-        )
-      | `Export_as_name_id_choice_auto_semi of (
-            Token.t (* "export" *) * Token.t (* "as" *)
-          * Token.t (* "namespace" *) * identifier (*tok*) * semicolon
+      | `Rep_deco_export_choice_decl of (
+            decorator list (* zero or more *)
+          * Token.t (* "export" *)
+          * [
+                `Decl of declaration
+              | `Defa_choice_decl of (
+                    Token.t (* "default" *)
+                  * [
+                        `Decl of declaration
+                      | `Exp_choice_auto_semi of (expression * semicolon)
+                    ]
+                )
+            ]
         )
     ]
-  | `Export_type_choice_STAR_from_clause_choice_auto_semi of (
+  | `Export_type_export_clause_opt_from_clause_choice_auto_semi of (
         Token.t (* "export" *)
       * Token.t (* "type" *)
-      * [
-            `STAR_from_clause of (Token.t (* "*" *) * from_clause)
-          | `Name_export_from_clause of (namespace_export * from_clause)
-        ]
+      * export_clause
+      * from_clause option
       * semicolon
+    )
+  | `Export_EQ_exp_choice_auto_semi of (
+        Token.t (* "export" *) * Token.t (* "=" *) * expression * semicolon
+    )
+  | `Export_as_name_id_choice_auto_semi of (
+        Token.t (* "export" *) * Token.t (* "as" *)
+      * Token.t (* "namespace" *) * identifier (*tok*) * semicolon
     )
 ]
 
