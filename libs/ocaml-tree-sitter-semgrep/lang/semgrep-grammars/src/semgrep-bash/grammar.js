@@ -105,6 +105,28 @@ module.exports = grammar(base_grammar, {
       )
     ),
 
+    // Fragile. Copy of the upstream rule with the terminator after 'in'
+    // made optional, so that single-line case statements such as
+    //   case "$b" in x) echo a ;; esac
+    // parse instead of producing an ERROR node (semgrep#11966).
+    // This matches upstream tree-sitter-bash commit e82ab4de
+    // ("fix: cases can be on a single line", 2023-07-23), which changed
+    // `$._terminator` to `optional($._terminator)` after `'in'`.
+    // TODO: drop this override when the upstream pin in
+    // upstream-grammars.json moves past e82ab4de.
+    case_statement: $ => seq(
+      'case',
+      field('value', $._literal),
+      optional($._terminator),
+      'in',
+      optional($._terminator),
+      optional(seq(
+        repeat($.case_item),
+        alias($.last_case_item, $.case_item),
+      )),
+      'esac'
+    ),
+
     semgrep_metavariable: $ => /\$[A-Z_][A-Z_0-9]*/,
     semgrep_metavar_eq: $ => /\$[A-Z_][A-Z_0-9]*=/,
     semgrep_metavar_pluseq: $ => /\$[A-Z_][A-Z_0-9]*\+=/,

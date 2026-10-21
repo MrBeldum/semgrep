@@ -346,3 +346,18 @@ $...ARGS and more
       (string
         (simple_expansion
           (semgrep_named_ellipsis))))))
+
+======================================================================
+Single-line case statement (no terminator after 'in')
+======================================================================
+
+case "$b" in x) echo a ;; esac
+
+---
+
+(program
+  (case_statement
+    (string (simple_expansion (variable_name)))
+    (case_item
+      (word)
+      (command (command_name (word)) (word)))))

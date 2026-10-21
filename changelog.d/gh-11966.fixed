@@ -1,0 +1,1 @@
+Fixed bash parsing of single-line `case` statements such as `case "$b" in x) echo a ;; esac`, which previously produced a partial-parse (syntax error) although bash accepts them. The semgrep-bash grammar now allows the terminator after `in` to be omitted, matching upstream tree-sitter-bash.
