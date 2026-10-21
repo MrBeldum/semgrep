@@ -165,11 +165,16 @@ export type * as ns from "./t.types";
 ---
 
 (program
-  (export_statement
-    source: (string
-      (string_fragment)))
-  (export_statement
-    (namespace_export
-      (identifier))
-    source: (string
-      (string_fragment))))
+  (statement
+    (export_statement
+      (from_clause
+        source: (string
+          (unescaped_double_string_fragment)))))
+  (statement
+    (export_statement
+      (namespace_export
+        (module_export_name
+          (identifier)))
+      (from_clause
+        source: (string
+          (unescaped_double_string_fragment))))))

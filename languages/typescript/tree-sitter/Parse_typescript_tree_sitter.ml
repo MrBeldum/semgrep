@@ -3240,128 +3240,178 @@ and array_ (env : env) ((v1, v2, v3) : CST.array_) =
 
 and export_statement (env : env) (x : CST.export_statement) : stmt list =
   match x with
-  | `Choice_export_choice_STAR_from_clause_choice_auto_semi x -> (
+  | `Choice_choice_export_choice_STAR_from_clause_choice_auto_semi x -> (
       match x with
-      | `Export_choice_STAR_from_clause_choice_auto_semi (v1, v2, v3) ->
-          let export_tok =
-            token env v1
-            (* "export" *)
-          in
-          let v2 =
-            match v2 with
-            | `STAR_from_clause (v1, v2) ->
-                (* export * from 'foo'; *)
-                let star =
-                  token env v1
-                  (* "*" *)
-                in
-                let from, path = from_clause env v2 in
-                [ M (ReExportNamespace (export_tok, star, None, from, path)) ]
-            | `Name_export_from_clause (v1, v2) ->
-                (* export * as foo from "module"; *)
-                let star, alias =
-                  namespace_export env v1
-                  (* * as foo *)
-                in
-                let from, path =
-                  from_clause env v2
-                  (* from "module" *)
-                in
-                [
-                  M
-                    (ReExportNamespace (export_tok, star, Some alias, from, path));
-                ]
-            | `Export_clause_from_clause (v1, v2) ->
-                (* export { name1, name2, nameN } from 'foo'; *)
-                let v1 = export_clause env v1 in
-                let tok2, path = from_clause env v2 in
-                v1
-                |> List.concat_map (fun (n1, n2opt) ->
-                    let tmpname = fake_id ("!tmp_" ^ n1.str) n1.tok in
-                    let import = Import (tok2, [ (n1, Some tmpname) ], path) in
-                    let e = idexp tmpname in
-                    match n2opt with
-                    | None ->
-                        let v = Ast_js.mk_const_var n1 e in
-                        [ M import; DefStmt v; M (Export (export_tok, n1)) ]
-                    | Some n2 ->
-                        let v = Ast_js.mk_const_var n2 e in
-                        [ M import; DefStmt v; M (Export (export_tok, n2)) ])
-            | `Export_clause x ->
-                (* export { import1 as name1, import2 as name2, nameN } from 'foo'; *)
-                let v1 = export_clause env x in
-                v1
-                |> List.concat_map (fun (n1, n2opt) ->
-                    match n2opt with
-                    | None -> [ M (Export (export_tok, n1)) ]
-                    | Some n2 ->
-                        let v =
-                          Ast_js.mk_const_var { n2 with fake = true } (idexp n1)
-                        in
-                        [ DefStmt v; M (Export (export_tok, n2)) ])
-          in
-          let _v3 = semicolon env v3 in
-          v2
-      | `Rep_deco_export_choice_decl (v1, v2, v3) ->
-          let decorators = List.map (decorator env) v1 in
-          let export_tok =
-            token env v2
-            (* "export" *)
-          in
-          let v3 =
-            match v3 with
-            | `Decl x ->
-                let defs = declaration env x in
-                defs
-                |> List.concat_map (fun def ->
-                    let ent, defkind = def in
-                    let n = ent.name in
-                    let ent = { ent with attrs = ent.attrs @ decorators } in
-                    [ DefStmt (ent, defkind); M (Export (export_tok, n)) ])
-            | `Defa_choice_decl (v1, v2) -> (
-                let tok_default (* TODO *) =
-                  token env v1
-                  (* "default" *)
-                in
+      | `Choice_export_choice_STAR_from_clause_choice_auto_semi x -> (
+          match x with
+          | `Export_choice_STAR_from_clause_choice_auto_semi (v1, v2, v3) ->
+              let export_tok =
+                token env v1
+                (* "export" *)
+              in
+              let v2 =
                 match v2 with
+                | `STAR_from_clause (v1, v2) ->
+                    (* export * from 'foo'; *)
+                    let star =
+                      token env v1
+                      (* "*" *)
+                    in
+                    let from, path = from_clause env v2 in
+                    [ M (ReExportNamespace (export_tok, star, None, from, path)) ]
+                | `Name_export_from_clause (v1, v2) ->
+                    (* export * as foo from "module"; *)
+                    let star, alias =
+                      namespace_export env v1
+                      (* * as foo *)
+                    in
+                    let from, path =
+                      from_clause env v2
+                      (* from "module" *)
+                    in
+                    [
+                      M
+                        (ReExportNamespace (export_tok, star, Some alias, from, path));
+                    ]
+                | `Export_clause_from_clause (v1, v2) ->
+                    (* export { name1, name2, nameN } from 'foo'; *)
+                    let v1 = export_clause env v1 in
+                    let tok2, path = from_clause env v2 in
+                    v1
+                    |> List.concat_map (fun (n1, n2opt) ->
+                        let tmpname = fake_id ("!tmp_" ^ n1.str) n1.tok in
+                        let import = Import (tok2, [ (n1, Some tmpname) ], path) in
+                        let e = idexp tmpname in
+                        match n2opt with
+                        | None ->
+                            let v = Ast_js.mk_const_var n1 e in
+                            [ M import; DefStmt v; M (Export (export_tok, n1)) ]
+                        | Some n2 ->
+                            let v = Ast_js.mk_const_var n2 e in
+                            [ M import; DefStmt v; M (Export (export_tok, n2)) ])
+                | `Export_clause x ->
+                    (* export { import1 as name1, import2 as name2, nameN } from 'foo'; *)
+                    let v1 = export_clause env x in
+                    v1
+                    |> List.concat_map (fun (n1, n2opt) ->
+                        match n2opt with
+                        | None -> [ M (Export (export_tok, n1)) ]
+                        | Some n2 ->
+                            let v =
+                              Ast_js.mk_const_var { n2 with fake = true } (idexp n1)
+                            in
+                            [ DefStmt v; M (Export (export_tok, n2)) ])
+              in
+              let _v3 = semicolon env v3 in
+              v2
+          | `Rep_deco_export_choice_decl (v1, v2, v3) ->
+              let decorators = List.map (decorator env) v1 in
+              let export_tok =
+                token env v2
+                (* "export" *)
+              in
+              let v3 =
+                match v3 with
                 | `Decl x ->
                     let defs = declaration env x in
                     defs
                     |> List.concat_map (fun def ->
                         let ent, defkind = def in
+                        let n = ent.name in
                         let ent = { ent with attrs = ent.attrs @ decorators } in
-                        let def = (ent, defkind) in
+                        [ DefStmt (ent, defkind); M (Export (export_tok, n)) ])
+                | `Defa_choice_decl (v1, v2) -> (
+                    let tok_default (* TODO *) =
+                      token env v1
+                      (* "default" *)
+                    in
+                    match v2 with
+                    | `Decl x ->
+                        let defs = declaration env x in
+                        defs
+                        |> List.concat_map (fun def ->
+                            let ent, defkind = def in
+                            let ent = { ent with attrs = ent.attrs @ decorators } in
+                            let def = (ent, defkind) in
 
-                        let default_decl, default_name =
-                          let expr = idexp ent.name in
-                          Ast_js.mk_default_entity_def tok_default expr
-                        in
+                            let default_decl, default_name =
+                              let expr = idexp ent.name in
+                              Ast_js.mk_default_entity_def tok_default expr
+                            in
 
-                        (*
-                         We translate into 3 statements:
+                            (*
+                             We translate into 3 statements:
 
-                           export default const foo = bar
+                               export default const foo = bar
 
-                         -->
+                             -->
 
-                           const foo = bar
-                           const default = foo
-                           export default
-                      *)
-                        [
-                          DefStmt def;
-                          DefStmt default_decl;
-                          M (Export (export_tok, default_name));
-                        ])
-                | `Exp_choice_auto_semi (v1, v2) ->
-                    let e = expression env v1 in
-                    let _semi = semicolon env v2 in
-                    let def, n = Ast_js.mk_default_entity_def tok_default e in
-                    [ DefStmt def; M (Export (export_tok, n)) ])
+                               const foo = bar
+                               const default = foo
+                               export default
+                          *)
+                            [
+                              DefStmt def;
+                              DefStmt default_decl;
+                              M (Export (export_tok, default_name));
+                            ])
+                    | `Exp_choice_auto_semi (v1, v2) ->
+                        let e = expression env v1 in
+                        let _semi = semicolon env v2 in
+                        let def, n = Ast_js.mk_default_entity_def tok_default e in
+                        [ DefStmt def; M (Export (export_tok, n)) ])
+              in
+              v3)
+      | `Export_type_export_clause_opt_from_clause_choice_auto_semi
+          (v1, v2, v3, _v4, v5) ->
+          let _export =
+            token env v1
+            (* "export" *)
           in
-          v3)
-  | `Export_type_export_clause_opt_from_clause_choice_auto_semi
-      (v1, v2, v3, _v4, v5) ->
+          let _type =
+            token env v2
+            (* "type" *)
+          in
+          let _exported_types = export_clause env v3 in
+          (* TODO v4 from_clause *)
+          let _sc = semicolon env v5 in
+          (* TODO: 'export type { foo, type bar, typeof thing };' *)
+          []
+      | `Export_EQ_exp_choice_auto_semi (v1, v2, v3, v4) ->
+          let _v1 =
+            token env v1
+            (* "export" *)
+          in
+          let _v2 =
+            token env v2
+            (* "=" *)
+          in
+          let _v3 = expression env v3 in
+          let _v4 = semicolon env v4 in
+          (* TODO 'export = ZipCodeValidator;' *)
+          []
+      | `Export_as_name_id_choice_auto_semi (v1, v2, v3, v4, v5) ->
+          let _v1 =
+            token env v1
+            (* "export" *)
+          in
+          let _v2 =
+            token env v2
+            (* "as" *)
+          in
+          let _v3 =
+            token env v3
+            (* "namespace" *)
+          in
+          let _v4 =
+            token env v4
+            (* identifier *)
+          in
+          let _v5 = semicolon env v5 in
+          (* TODO 'export as namespace mathLib;' *)
+          []
+      )
+  | `Export_type_choice_STAR_from_clause_choice_auto_semi (v1, v2, v3, v4) ->
       let _export =
         token env v1
         (* "export" *)
@@ -3370,43 +3420,21 @@ and export_statement (env : env) (x : CST.export_statement) : stmt list =
         token env v2
         (* "type" *)
       in
-      let _exported_types = export_clause env v3 in
-      (* TODO v4 from_clause *)
-      let _sc = semicolon env v5 in
-      (* TODO: 'export type { foo, type bar, typeof thing };' *)
-      []
-  | `Export_EQ_exp_choice_auto_semi (v1, v2, v3, v4) ->
-      let _v1 =
-        token env v1
-        (* "export" *)
+      let _star_or_ns =
+        match v3 with
+        | `STAR_from_clause (v1, v2) ->
+            (* export type * from 'foo'; *)
+            let _star = token env v1 (* "*" *) in
+            let _from, _path = from_clause env v2 in
+            ()
+        | `Name_export_from_clause (v1, v2) ->
+            (* export type * as ns from 'foo'; *)
+            let _star, _alias = namespace_export env v1 (* * as ns *) in
+            let _from, _path = from_clause env v2 in
+            ()
       in
-      let _v2 =
-        token env v2
-        (* "=" *)
-      in
-      let _v3 = expression env v3 in
-      let _v4 = semicolon env v4 in
-      (* TODO 'export = ZipCodeValidator;' *)
-      []
-  | `Export_as_name_id_choice_auto_semi (v1, v2, v3, v4, v5) ->
-      let _v1 =
-        token env v1
-        (* "export" *)
-      in
-      let _v2 =
-        token env v2
-        (* "as" *)
-      in
-      let _v3 =
-        token env v3
-        (* "namespace" *)
-      in
-      let _v4 =
-        token env v4
-        (* identifier *)
-      in
-      let _v5 = semicolon env v5 in
-      (* TODO 'export as namespace mathLib;' *)
+      let _sc = semicolon env v4 in
+      (* TODO: 'export type * from "foo";' and 'export type * as ns from "foo";' *)
       []
 
 and type_annotation (env : env) ((v1, v2) : CST.type_annotation) =

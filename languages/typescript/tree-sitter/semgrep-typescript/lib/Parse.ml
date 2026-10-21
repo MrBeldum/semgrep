@@ -6600,110 +6600,119 @@ and trans_export_statement ((kind, body) : mt) : CST.export_statement =
   | Children v ->
       (match v with
       | Alt (0, v) ->
-          `Choice_export_choice_STAR_from_clause_choice_auto_semi (
+          `Choice_choice_export_choice_STAR_from_clause_choice_auto_semi (
             (match v with
             | Alt (0, v) ->
-                `Export_choice_STAR_from_clause_choice_auto_semi (
+                `Choice_export_choice_STAR_from_clause_choice_auto_semi (
                   (match v with
-                  | Seq [v0; v1; v2] ->
-                      (
-                        Run.trans_token (Run.matcher_token v0),
-                        (match v1 with
-                        | Alt (0, v) ->
-                            `STAR_from_clause (
-                              (match v with
-                              | Seq [v0; v1] ->
-                                  (
-                                    Run.trans_token (Run.matcher_token v0),
-                                    trans_from_clause (Run.matcher_token v1)
-                                  )
-                              | _ -> assert false
-                              )
-                            )
-                        | Alt (1, v) ->
-                            `Name_export_from_clause (
-                              (match v with
-                              | Seq [v0; v1] ->
-                                  (
-                                    trans_namespace_export (Run.matcher_token v0),
-                                    trans_from_clause (Run.matcher_token v1)
-                                  )
-                              | _ -> assert false
-                              )
-                            )
-                        | Alt (2, v) ->
-                            `Export_clause_from_clause (
-                              (match v with
-                              | Seq [v0; v1] ->
-                                  (
-                                    trans_export_clause (Run.matcher_token v0),
-                                    trans_from_clause (Run.matcher_token v1)
-                                  )
-                              | _ -> assert false
-                              )
-                            )
-                        | Alt (3, v) ->
-                            `Export_clause (
-                              trans_export_clause (Run.matcher_token v)
-                            )
-                        | _ -> assert false
-                        )
-                        ,
-                        (match v2 with
-                        | Alt (0, v) ->
-                            `Auto_semi (
-                              trans_automatic_semicolon (Run.matcher_token v)
-                            )
-                        | Alt (1, v) ->
-                            `SEMI (
-                              Run.trans_token (Run.matcher_token v)
-                            )
-                        | _ -> assert false
-                        )
-                      )
-                  | _ -> assert false
-                  )
-                )
-            | Alt (1, v) ->
-                `Rep_deco_export_choice_decl (
-                  (match v with
-                  | Seq [v0; v1; v2] ->
-                      (
-                        Run.repeat
-                          (fun v -> trans_decorator (Run.matcher_token v))
-                          v0
-                        ,
-                        Run.trans_token (Run.matcher_token v1),
-                        (match v2 with
-                        | Alt (0, v) ->
-                            `Decl (
-                              trans_declaration (Run.matcher_token v)
-                            )
-                        | Alt (1, v) ->
-                            `Defa_choice_decl (
-                              (match v with
-                              | Seq [v0; v1] ->
-                                  (
-                                    Run.trans_token (Run.matcher_token v0),
-                                    (match v1 with
-                                    | Alt (0, v) ->
-                                        `Decl (
-                                          trans_declaration (Run.matcher_token v)
+                  | Alt (0, v) ->
+                      `Export_choice_STAR_from_clause_choice_auto_semi (
+
+                        (match v with
+                        | Seq [v0; v1; v2] ->
+                            (
+                              Run.trans_token (Run.matcher_token v0),
+                              (match v1 with
+                              | Alt (0, v) ->
+                                  `STAR_from_clause (
+                                    (match v with
+                                    | Seq [v0; v1] ->
+                                        (
+                                          Run.trans_token (Run.matcher_token v0),
+                                          trans_from_clause (Run.matcher_token v1)
                                         )
-                                    | Alt (1, v) ->
-                                        `Exp_choice_auto_semi (
-                                          (match v with
-                                          | Seq [v0; v1] ->
-                                              (
-                                                trans_expression (Run.matcher_token v0),
-                                                (match v1 with
-                                                | Alt (0, v) ->
-                                                    `Auto_semi (
-                                                      trans_automatic_semicolon (Run.matcher_token v)
-                                                    )
-                                                | Alt (1, v) ->
-                                                    `SEMI (
-                                                      Run.trans_token (Run.matcher_token v)
+                                    | _ -> assert false
+                                    )
+                                  )
+                              | Alt (1, v) ->
+                                  `Name_export_from_clause (
+                                    (match v with
+                                    | Seq [v0; v1] ->
+                                        (
+                                          trans_namespace_export (Run.matcher_token v0),
+                                          trans_from_clause (Run.matcher_token v1)
+                                        )
+                                    | _ -> assert false
+                                    )
+                                  )
+                              | Alt (2, v) ->
+                                  `Export_clause_from_clause (
+                                    (match v with
+                                    | Seq [v0; v1] ->
+                                        (
+                                          trans_export_clause (Run.matcher_token v0),
+                                          trans_from_clause (Run.matcher_token v1)
+                                        )
+                                    | _ -> assert false
+                                    )
+                                  )
+                              | Alt (3, v) ->
+                                  `Export_clause (
+                                    trans_export_clause (Run.matcher_token v)
+                                  )
+                              | _ -> assert false
+                              )
+                              ,
+                              (match v2 with
+                              | Alt (0, v) ->
+                                  `Auto_semi (
+                                    trans_automatic_semicolon (Run.matcher_token v)
+                                  )
+                              | Alt (1, v) ->
+                                  `SEMI (
+                                    Run.trans_token (Run.matcher_token v)
+                                  )
+                              | _ -> assert false
+                              )
+                            )
+                        | _ -> assert false
+                        )
+
+                      )
+                  | Alt (1, v) ->
+                      `Rep_deco_export_choice_decl (
+
+                        (match v with
+                        | Seq [v0; v1; v2] ->
+                            (
+                              Run.repeat
+                                (fun v -> trans_decorator (Run.matcher_token v))
+                                v0
+                              ,
+                              Run.trans_token (Run.matcher_token v1),
+                              (match v2 with
+                              | Alt (0, v) ->
+                                  `Decl (
+                                    trans_declaration (Run.matcher_token v)
+                                  )
+                              | Alt (1, v) ->
+                                  `Defa_choice_decl (
+                                    (match v with
+                                    | Seq [v0; v1] ->
+                                        (
+                                          Run.trans_token (Run.matcher_token v0),
+                                          (match v1 with
+                                          | Alt (0, v) ->
+                                              `Decl (
+                                                trans_declaration (Run.matcher_token v)
+                                              )
+                                          | Alt (1, v) ->
+                                              `Exp_choice_auto_semi (
+                                                (match v with
+                                                | Seq [v0; v1] ->
+                                                    (
+                                                      trans_expression (Run.matcher_token v0),
+                                                      (match v1 with
+                                                      | Alt (0, v) ->
+                                                          `Auto_semi (
+                                                            trans_automatic_semicolon (Run.matcher_token v)
+                                                          )
+                                                      | Alt (1, v) ->
+                                                          `SEMI (
+                                                            Run.trans_token (Run.matcher_token v)
+                                                          )
+                                                      | _ -> assert false
+                                                      )
                                                     )
                                                 | _ -> assert false
                                                 )
@@ -6719,86 +6728,140 @@ and trans_export_statement ((kind, body) : mt) : CST.export_statement =
                             )
                         | _ -> assert false
                         )
+
                       )
                   | _ -> assert false
                   )
+                )
+            | Alt (1, v) ->
+                `Export_type_export_clause_opt_from_clause_choice_auto_semi (
+
+                  (match v with
+                  | Seq [v0; v1; v2; v3; v4] ->
+                      (
+                        Run.trans_token (Run.matcher_token v0),
+                        Run.trans_token (Run.matcher_token v1),
+                        trans_export_clause (Run.matcher_token v2),
+                        Run.opt
+                          (fun v -> trans_from_clause (Run.matcher_token v))
+                          v3
+                        ,
+                        (match v4 with
+                        | Alt (0, v) ->
+                            `Auto_semi (
+                              trans_automatic_semicolon (Run.matcher_token v)
+                            )
+                        | Alt (1, v) ->
+                            `SEMI (
+                              Run.trans_token (Run.matcher_token v)
+                            )
+                        | _ -> assert false
+                        )
+                      )
+                  | _ -> assert false
+                  )
+
+                )
+            | Alt (2, v) ->
+                `Export_EQ_exp_choice_auto_semi (
+
+                  (match v with
+                  | Seq [v0; v1; v2; v3] ->
+                      (
+                        Run.trans_token (Run.matcher_token v0),
+                        Run.trans_token (Run.matcher_token v1),
+                        trans_expression (Run.matcher_token v2),
+                        (match v3 with
+                        | Alt (0, v) ->
+                            `Auto_semi (
+                              trans_automatic_semicolon (Run.matcher_token v)
+                            )
+                        | Alt (1, v) ->
+                            `SEMI (
+                              Run.trans_token (Run.matcher_token v)
+                            )
+                        | _ -> assert false
+                        )
+                      )
+                  | _ -> assert false
+                  )
+
+                )
+            | Alt (3, v) ->
+                `Export_as_name_id_choice_auto_semi (
+
+                  (match v with
+                  | Seq [v0; v1; v2; v3; v4] ->
+                      (
+                        Run.trans_token (Run.matcher_token v0),
+                        Run.trans_token (Run.matcher_token v1),
+                        Run.trans_token (Run.matcher_token v2),
+                        trans_identifier (Run.matcher_token v3),
+                        (match v4 with
+                        | Alt (0, v) ->
+                            `Auto_semi (
+                              trans_automatic_semicolon (Run.matcher_token v)
+                            )
+                        | Alt (1, v) ->
+                            `SEMI (
+                              Run.trans_token (Run.matcher_token v)
+                            )
+                        | _ -> assert false
+                        )
+                      )
+                  | _ -> assert false
+                  )
+
                 )
             | _ -> assert false
             )
           )
       | Alt (1, v) ->
-          `Export_type_export_clause_opt_from_clause_choice_auto_semi (
-            (match v with
-            | Seq [v0; v1; v2; v3; v4] ->
-                (
-                  Run.trans_token (Run.matcher_token v0),
-                  Run.trans_token (Run.matcher_token v1),
-                  trans_export_clause (Run.matcher_token v2),
-                  Run.opt
-                    (fun v -> trans_from_clause (Run.matcher_token v))
-                    v3
-                  ,
-                  (match v4 with
-                  | Alt (0, v) ->
-                      `Auto_semi (
-                        trans_automatic_semicolon (Run.matcher_token v)
-                      )
-                  | Alt (1, v) ->
-                      `SEMI (
-                        Run.trans_token (Run.matcher_token v)
-                      )
-                  | _ -> assert false
-                  )
-                )
-            | _ -> assert false
-            )
-          )
-      | Alt (2, v) ->
-          `Export_EQ_exp_choice_auto_semi (
-            (match v with
-            | Seq [v0; v1; v2; v3] ->
-                (
-                  Run.trans_token (Run.matcher_token v0),
-                  Run.trans_token (Run.matcher_token v1),
-                  trans_expression (Run.matcher_token v2),
-                  (match v3 with
-                  | Alt (0, v) ->
-                      `Auto_semi (
-                        trans_automatic_semicolon (Run.matcher_token v)
-                      )
-                  | Alt (1, v) ->
-                      `SEMI (
-                        Run.trans_token (Run.matcher_token v)
-                      )
-                  | _ -> assert false
-                  )
-                )
-            | _ -> assert false
-            )
-          )
-      | Alt (3, v) ->
-          `Export_as_name_id_choice_auto_semi (
-            (match v with
-            | Seq [v0; v1; v2; v3; v4] ->
-                (
-                  Run.trans_token (Run.matcher_token v0),
-                  Run.trans_token (Run.matcher_token v1),
-                  Run.trans_token (Run.matcher_token v2),
-                  trans_identifier (Run.matcher_token v3),
-                  (match v4 with
-                  | Alt (0, v) ->
-                      `Auto_semi (
-                        trans_automatic_semicolon (Run.matcher_token v)
-                      )
-                  | Alt (1, v) ->
-                      `SEMI (
-                        Run.trans_token (Run.matcher_token v)
-                      )
-                  | _ -> assert false
-                  )
-                )
-            | _ -> assert false
-            )
+          `Export_type_choice_STAR_from_clause_choice_auto_semi (
+              (match v with
+                          | Seq [v0; v1; v2; v3] ->
+                              (
+                                Run.trans_token (Run.matcher_token v0),
+                                Run.trans_token (Run.matcher_token v1),
+                                (match v2 with
+                                | Alt (0, v) ->
+                                    `STAR_from_clause (
+                                      (match v with
+                                      | Seq [v0; v1] ->
+                                          (
+                                            Run.trans_token (Run.matcher_token v0),
+                                            trans_from_clause (Run.matcher_token v1)
+                                          )
+                                      | _ -> assert false
+                                      )
+                                    )
+                                | Alt (1, v) ->
+                                    `Name_export_from_clause (
+                                      (match v with
+                                      | Seq [v0; v1] ->
+                                          (
+                                            trans_namespace_export (Run.matcher_token v0),
+                                            trans_from_clause (Run.matcher_token v1)
+                                          )
+                                      | _ -> assert false
+                                      )
+                                    )
+                                | _ -> assert false
+                                ),
+                                (match v3 with
+                                | Alt (0, v) ->
+                                    `Auto_semi (
+                                      trans_automatic_semicolon (Run.matcher_token v)
+                                    )
+                                | Alt (1, v) ->
+                                    `SEMI (
+                                      Run.trans_token (Run.matcher_token v)
+                                    )
+                                | _ -> assert false
+                                )
+                              )
+                          | _ -> assert false
+                          )
           )
       | _ -> assert false
       )

@@ -1,0 +1,18 @@
+==================================
+Type-only star re-exports (TypeScript 5.0)
+==================================
+
+export type * from "./t.types";
+export type * as ns from "./t.types";
+
+---
+
+(program
+  (export_statement
+    source: (string
+      (string_fragment)))
+  (export_statement
+    (namespace_export
+      (identifier))
+    source: (string
+      (string_fragment))))
